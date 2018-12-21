@@ -4,6 +4,7 @@
   "description": "Agent to provide weather reports on wake up",
   "main": "src/index.js",
   "scripts": {
+    "lint": "eslint 'src/**/*.js'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -13,6 +14,10 @@
     "xml-js": "^1.6.8"
   },
   "devDependencies": {
+    "eslint": "^5.10.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-import": "^2.14.0",
     "prettier": "^1.15.3"
   }
 }
