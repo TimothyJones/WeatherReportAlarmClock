@@ -1,4 +1,5 @@
 const forecast = require('../connectors/weatherForecast');
-const forecastToText = require('./ssmlGenerator');
+const polly = require('../connectors/polly');
+const forecastToSsml = require('./ssmlGenerator');
 
-forecast.getWeatherForecast().then(data => console.log(forecastToText(data)));
+forecast.getWeatherForecast().then(data => polly(forecastToSsml(data)));
