@@ -2,7 +2,7 @@
   "name": "wakeup",
   "version": "0.1.0",
   "description": "Agent to provide weather reports on wake up",
-  "main": "src/index.js",
+  "main": "src/domain/index.js",
   "scripts": {
     "lint": "eslint 'src/**/*.js'",
     "test": "echo \"Error: no test specified\" && exit 1"
