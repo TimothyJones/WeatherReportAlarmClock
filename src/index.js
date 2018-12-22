@@ -1,3 +1,4 @@
 const forecast = require('./connectors/weatherForecast');
+const forecastToText = require('./domain/toText');
 
-forecast.getWeatherForecast().then(tomorrow => console.log(tomorrow));
+forecast.getWeatherForecast().then(data => console.log(forecastToText(data)));

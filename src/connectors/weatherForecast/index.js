@@ -14,12 +14,12 @@ const getWeatherForecast = () =>
       err ? reject(err) : resolve(res)
     );
   })
-    .catch(error => makeError(error, 'Network error'))
+    .catch(error => makeError(error, 'encountered a network error'))
     .then(file => process(file, f => fs.readFileSync(f, { encoding: 'utf8' })))
-    .catch(error => makeError(error, 'Unable to read file'))
+    .catch(error => makeError(error, 'could not read the downloaded file'))
     .then(xml => process(xml, x => JSON.parse(xml2json.xml2json(x))))
-    .catch(error => makeError(error, 'Unable to parse file'))
+    .catch(error => makeError(error, 'could not parse the downloaded xml'))
     .then(x => process(x, convertForecast))
-    .catch(error => makeError(error, 'Forecast in unexpected structure'));
+    .catch(error => makeError(error, 'the xml was not in the expected format'));
 
 module.exports.getWeatherForecast = getWeatherForecast;
