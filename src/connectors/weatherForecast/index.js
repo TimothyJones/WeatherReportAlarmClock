@@ -10,11 +10,11 @@ const makeError = (error, text) => ({ error, text });
 
 const getWeatherForecast = () =>
   new Promise((resolve, reject) => {
-    ftp.get(MELBOURNE_WEATHER_URL, 'melbourne.xml', (err, res) =>
+    ftp.get(MELBOURNE_WEATHER_URL, '/tmp/melbourne.xml', (err, res) =>
       err ? reject(err) : resolve(res)
     );
   })
-    .catch(error => makeError(error, 'encountered a network error'))
+    .catch(error => makeError(error, `encountered a network error ${error}`))
     .then(file => process(file, f => fs.readFileSync(f, { encoding: 'utf8' })))
     .catch(error => makeError(error, 'could not read the downloaded file'))
     .then(xml => process(xml, x => JSON.parse(xml2json.xml2json(x))))

@@ -20,6 +20,7 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",
-    "prettier": "^1.15.3"
+    "prettier": "^1.15.3",
+    "serverless-apigw-binary": "^0.4.4"
   }
 }
