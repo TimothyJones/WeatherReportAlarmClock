@@ -3,9 +3,8 @@ const errorDescription = data => (data.text ? `This may be because ${data.text}.
 const shortDescription = data => {
   if (data.error) {
     return `I was unable to read the forecast today. ${errorDescription(data)}`;
-  } else {
-    return `The forecast for today says ${data.text}`;
   }
+  return `The forecast for today says ${data.text}`;
 };
 
 const umbrella = data => {
@@ -13,9 +12,11 @@ const umbrella = data => {
     const chance = parseInt(data.rainChance, 10);
     if (chance >= 60) {
       return 'It is very likely to rain. You probably want to take an umbrella.';
-    } else if (chance >= 30) {
+    }
+    if (chance >= 30) {
       return 'It might rain. You may want to take an umbrella.';
-    } else if (chance > 0) {
+    }
+    if (chance > 0) {
       return 'There is a slim chance of rain.';
     }
   }
@@ -31,10 +32,9 @@ const temperatureDescription = data => {
   return '';
 };
 
-const forecastToText = data => {
-  return `<speak>Good morning. <prosody rate="fast"><amazon:auto-breaths duration="short" volume="soft">${shortDescription(
+const forecastToText = data =>
+  `<speak>Good morning. <prosody rate="fast"><amazon:auto-breaths duration="short" volume="soft">${shortDescription(
     data
   )} ${umbrella(data)} ${temperatureDescription(data)}</amazon:auto-breaths></prosody></speak>`;
-};
 
 module.exports = forecastToText;
