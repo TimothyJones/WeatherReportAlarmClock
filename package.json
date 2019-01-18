@@ -12,7 +12,7 @@
   "dependencies": {
     "aws-sdk": "^2.382.0",
     "ftp-get": "^0.3.1",
-    "moment": "^2.23.0",
+    "moment-timezone": "^0.5.23",
     "xml-js": "^1.6.8"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-const moment = require('moment');
+const moment = require('moment-timezone');
 
 const forecastFor = (json, time) => {
   const day = json.elements[0].elements[1].elements
@@ -26,6 +26,6 @@ const marshal = selectedForecast =>
       }
     : { error: 'No day selected', text: 'the selected day was missing.' };
 
-const convertForecast = json => marshal(forecastFor(json, moment()));
+const convertForecast = json => marshal(forecastFor(json, moment().utc()));
 
 module.exports = convertForecast;
