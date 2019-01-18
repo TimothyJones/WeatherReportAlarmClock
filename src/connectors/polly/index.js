@@ -13,10 +13,18 @@ const synthesiseSsml = ssml => {
       LanguageCode: 'en-GB'
     },
     function(err, data) {
-      if (err) console.log(err, err.stack);
       // an error occurred
-      else console.log(data); // successful response
-      fs.writeFileSync('weather.mp3', data.AudioStream);
+      if (err) console.log(err, err.stack);
+      else {
+        console.log(
+          typeof data.AudioStream,
+          data.AudioStream.name,
+          data.AudioStream.constructor,
+          data.AudioStream.constructor.name
+        ); // successful response
+        return data;
+      }
+      //fs.writeFileSync('weather.mp3', data.AudioStream);
       /*
   data = {
    AudioStream: <Binary String>, 
