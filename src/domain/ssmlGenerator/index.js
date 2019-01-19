@@ -26,8 +26,8 @@ const umbrella = data => {
 const temperatureDescription = data => {
   if (data.minTemp || data.maxTemp) {
     return `The temperature is expected to reach ${
-      data.maxTemp ? `maximum ${data.maxTemp} degrees ${data.minTemp ? 'and' : ''}` : ''
-    } ${data.minTemp ? `minimum ${data.minTemp} degrees` : ''}`;
+      data.maxTemp ? `maximum ${data.maxTemp} degrees ${data.minTemp ? 'with a ' : ''}` : ''
+    } ${data.minTemp ? `minimum of ${data.minTemp} degrees` : ''}`;
   }
   return '';
 };
