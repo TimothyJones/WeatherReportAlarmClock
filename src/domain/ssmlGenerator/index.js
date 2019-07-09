@@ -1,4 +1,5 @@
-const errorDescription = data => (data.text ? `This may be because ${data.text}.` : '');
+const errorDescription = data =>
+  data.text ? `This may be because ${data.text}.` : "";
 
 const shortDescription = data => {
   if (data.error) {
@@ -11,30 +12,34 @@ const umbrella = data => {
   if (data.rainChance) {
     const chance = parseInt(data.rainChance, 10);
     if (chance >= 60) {
-      return 'It is very likely to rain. You probably want to take an umbrella.';
+      return "It is very likely to rain. You probably want to take an umbrella.";
     }
     if (chance >= 30) {
-      return 'It might rain. You may want to take an umbrella.';
+      return "It might rain. You may want to take an umbrella.";
     }
     if (chance > 0) {
-      return 'There is a slim chance of rain.';
+      return "There is a slim chance of rain.";
     }
   }
-  return '';
+  return "";
 };
 
 const temperatureDescription = data => {
   if (data.minTemp || data.maxTemp) {
     return `The temperature is expected to reach ${
-      data.maxTemp ? `maximum ${data.maxTemp} degrees ${data.minTemp ? 'with a ' : ''}` : ''
-    } ${data.minTemp ? `minimum of ${data.minTemp} degrees` : ''}`;
+      data.maxTemp
+        ? `maximum ${data.maxTemp} degrees ${data.minTemp ? "with a " : ""}`
+        : ""
+    } ${data.minTemp ? `minimum of ${data.minTemp} degrees` : ""}`;
   }
-  return '';
+  return "";
 };
 
 const forecastToText = data =>
-  `<speak>Good morning. <prosody rate="fast"><amazon:auto-breaths duration="short" volume="soft">${shortDescription(
+  `<speak><amazon:breath duration='x-long' volume='x-soft'/><break strength="strong"/>,Good morning. <prosody rate="fast"><amazon:auto-breaths duration="short" volume="soft">${shortDescription(
     data
-  )} ${umbrella(data)} ${temperatureDescription(data)}</amazon:auto-breaths></prosody></speak>`;
+  )} ${umbrella(data)} ${temperatureDescription(
+    data
+  )}</amazon:auto-breaths></prosody><break strength="strong"/><amazon:breath duration='x-long' volume='x-soft'/></speak>`;
 
 module.exports = forecastToText;
