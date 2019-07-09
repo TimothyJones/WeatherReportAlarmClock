@@ -164,6 +164,12 @@ Resources:
       Targets: 
         - Arn: !GetAtt ForecastLambda.Arn
           Id: ForecastLambda
-
+  LambdaSchedulePermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !Sub ${ForecastLambda.Arn}
+      Principal: 'events.amazonaws.com'
+      SourceArn: !Sub ${ScheduleRule.Arn}
 
           
