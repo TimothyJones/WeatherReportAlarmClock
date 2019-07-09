@@ -1,13 +1,13 @@
-const lambdaAudio = require("lambda-audio");
-const fs = require("fs");
-const waitOn = require("wait-on");
+const lambdaAudio = require('lambda-audio');
+const fs = require('fs');
+const waitOn = require('wait-on');
 
-const START = "./audio/wakeup-start.mp3";
-const END = "./audio/silence.mp3";
+const START = './audio/wakeup-start.mp3';
+const END = './audio/silence.mp3';
 
-const SAMPLED_SPEECH = "/tmp/up-forecast.mp3";
-const ORIGINAL_SPEECH = "/tmp/forecast.mp3";
-const OUTPUT = "/tmp/output.mp3";
+const SAMPLED_SPEECH = '/tmp/up-forecast.mp3';
+const ORIGINAL_SPEECH = '/tmp/forecast.mp3';
+const OUTPUT = '/tmp/output.mp3';
 
 module.exports.wrap = data =>
   Promise.resolve(data)
@@ -22,6 +22,6 @@ module.exports.wrap = data =>
     )
     .then(() =>
       waitOn({ resources: [OUTPUT], delay: 100 }).then(() =>
-        fs.readFileSync(OUTPUT, { encoding: null, flag: "r" })
+        fs.readFileSync(OUTPUT, { encoding: null, flag: 'r' })
       )
     );

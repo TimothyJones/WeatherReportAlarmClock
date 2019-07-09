@@ -1,5 +1,5 @@
 const errorDescription = data =>
-  data.text ? `This may be because ${data.text}.` : "";
+  data.text ? `This may be because ${data.text}.` : '';
 
 const shortDescription = data => {
   if (data.error) {
@@ -12,27 +12,27 @@ const umbrella = data => {
   if (data.rainChance) {
     const chance = parseInt(data.rainChance, 10);
     if (chance >= 60) {
-      return "It is very likely to rain. You probably want to take an umbrella.";
+      return 'It is very likely to rain. You probably want to take an umbrella.';
     }
     if (chance >= 30) {
-      return "It might rain. You may want to take an umbrella.";
+      return 'It might rain. You may want to take an umbrella.';
     }
     if (chance > 0) {
-      return "There is a slim chance of rain.";
+      return 'There is a slim chance of rain.';
     }
   }
-  return "";
+  return '';
 };
 
 const temperatureDescription = data => {
   if (data.minTemp || data.maxTemp) {
     return `The temperature is expected to reach ${
       data.maxTemp
-        ? `maximum ${data.maxTemp} degrees ${data.minTemp ? "with a " : ""}`
-        : ""
-    } ${data.minTemp ? `minimum of ${data.minTemp} degrees` : ""}`;
+        ? `maximum ${data.maxTemp} degrees ${data.minTemp ? 'with a ' : ''}`
+        : ''
+    } ${data.minTemp ? `minimum of ${data.minTemp} degrees` : ''}`;
   }
-  return "";
+  return '';
 };
 
 const forecastToText = data =>

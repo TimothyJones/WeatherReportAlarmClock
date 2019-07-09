@@ -1,16 +1,16 @@
-const AWS = require("aws-sdk");
+const AWS = require('aws-sdk');
 
 const synthesiseSsml = ssml =>
   new Promise((resolve, reject) => {
     console.log(ssml);
     new AWS.Polly().synthesizeSpeech(
       {
-        OutputFormat: "mp3",
-        SampleRate: "8000",
+        OutputFormat: 'mp3',
+        SampleRate: '8000',
         Text: ssml,
-        TextType: "ssml",
-        VoiceId: "Amy",
-        LanguageCode: "en-GB"
+        TextType: 'ssml',
+        VoiceId: 'Amy',
+        LanguageCode: 'en-GB',
       },
       (err, data) => {
         if (err) {
