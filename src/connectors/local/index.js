@@ -11,11 +11,11 @@ weather()
     eventEmitter.emit('done', null);
   })
   .catch(e => {
-    console.log(e);
-    eventEmitter.emit('done', { error: e });
+    eventEmitter.emit('done', e);
   });
 
 eventEmitter.on('done', e => {
-  // I needed the result to be written to stdout so that the calling process could get it
-  process.stdout.write(JSON.stringify(e));
+  if (e) {
+    process.stderr.write(JSON.stringify(e));
+  }
 });
