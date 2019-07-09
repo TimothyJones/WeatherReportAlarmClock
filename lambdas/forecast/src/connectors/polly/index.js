@@ -18,7 +18,7 @@ const synthesiseSsml = ssml =>
           console.log(err, err.stack);
           reject(err);
         }
-        resolve(data);
+        resolve(data.AudioStream);
       }
     );
   });

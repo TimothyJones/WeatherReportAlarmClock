@@ -1,0 +1,169 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::Serverless-2016-10-31'
+Parameters:
+  DeployBucketName:
+    Description: 'Name for the S3 bucket where the application will be deployed'
+    Type: String
+    Default: tims-notifications
+  Product: 
+    Type: String
+    Default: ForecastAlarm
+
+Resources:
+  DeployBucket:
+    Type: 'AWS::S3::Bucket'
+    DependsOn:
+      - WrapLambda
+      - WrapLambdaInvokePermission
+    Properties:
+      Tags:
+        - Key: Product
+          Value: !Ref Product
+      BucketName: !Ref DeployBucketName
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: 's3:ObjectCreated:*'
+            Function: !GetAtt WrapLambda.Arn
+            Filter: 
+              S3Key: 
+                Rules:
+                  - Name: prefix
+                    Value: audio/
+  WrapLambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties: 
+      Action: lambda:InvokeFunction
+      FunctionName: WrapWithChimeLambda
+      Principal: s3.amazonaws.com
+      SourceArn: 'arn:aws:s3:::tims-notifications'
+  WrapLambda:  
+    Type: AWS::Lambda::Function
+    Properties: 
+      Tags:
+        - Key: Product
+          Value: !Ref Product
+      Code: 
+        ZipFile: module.exports.handler = () => {}
+      FunctionName: WrapWithChimeLambda
+      Handler: index.handler
+      Role: !GetAtt WrapLambdaRole.Arn
+      Runtime: nodejs8.10
+      Timeout: 20
+  WrapLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - 'lambda.amazonaws.com'
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                Resource:
+                  - '*'
+              - Effect: Allow
+                Action:
+                  - 's3:PutObject'
+                  - 's3:PutObjectAcl'
+                  - 's3:ListBucket'
+                  - 's3:GetObject'
+                  - 's3:GetObjectAcl'
+                Resource:
+                  - 'arn:aws:s3:::tims-notifications'
+                  - 'arn:aws:s3:::tims-notifications/*'
+  ForecastLambda:  
+    Type: AWS::Lambda::Function
+    Properties: 
+      Tags:
+        - Key: Product
+          Value: !Ref Product
+      Code: 
+        ZipFile: module.exports.handler = () => {}
+      FunctionName: MelbourneForecastLambda
+      Handler: index.handler
+      Role: !GetAtt ForecastLambdaRole.Arn
+      Runtime: nodejs8.10
+  ForecastLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - 'lambda.amazonaws.com'
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                Resource:
+                  - '*'
+              - Effect: Allow
+                Action:
+                  - 's3:PutObject'
+                  - 's3:PutObjectAcl'
+                  - 's3:ListBucket'
+                Resource:
+                  - !GetAtt DeployBucket.Arn
+                  - !Join ['', [!GetAtt DeployBucket.Arn, '/*']]
+              - Effect: Allow
+                Action:
+                  - "polly:SynthesizeSpeech"
+                Resource:
+                  - '*'
+  ScheduleRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - 'events.amazonaws.com'
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'lambda:InvokeFunction'
+                Resource:
+                  - !GetAtt ForecastLambda.Arn
+  ScheduleRule:
+    Type: AWS::Events::Rule
+    Properties: 
+      Description: "Every day at weather report time"
+      RoleArn: !GetAtt ScheduleRole.Arn
+      ScheduleExpression: 'cron(0 16 * * ? *)'
+      State: ENABLED
+      Targets: 
+        - Arn: !GetAtt ForecastLambda.Arn
+          Id: ForecastLambda
+
+
+          

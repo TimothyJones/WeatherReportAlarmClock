@@ -1,0 +1,28 @@
+{
+  "name": "wrapWithChime",
+  "version": "0.1.0",
+  "description": "Agent to provide weather reports on wake up",
+  "main": "src/domain/index.js",
+  "scripts": {
+    "lint": "eslint 'src/**/*.js' --config ../../.eslintrc.js",
+    "prebuild": "npm run lint",
+    "build": "zip -r function.zip .",
+    "predeploy": "npm run build",
+    "deploy": "aws lambda update-function-code --function-name WrapWithChimeLambda --zip-file fileb://function.zip"
+  },
+  "author": "Tim Jones",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.382.0",
+    "lambda-audio": "^1.0.0",
+    "wait-on": "^3.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.10.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-import": "^2.14.0",
+    "prettier": "^1.15.3",
+    "serverless-apigw-binary": "^0.4.4"
+  }
+}

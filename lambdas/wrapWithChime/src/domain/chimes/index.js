@@ -11,8 +11,8 @@ const OUTPUT = '/tmp/output.mp3';
 
 module.exports.wrap = data =>
   Promise.resolve(data)
-    .then(data => {
-      fs.writeFileSync(`${ORIGINAL_SPEECH}`, data.AudioStream);
+    .then(audioStream => {
+      fs.writeFileSync(`${ORIGINAL_SPEECH}`, audioStream);
       return lambdaAudio.sox(`${ORIGINAL_SPEECH} -r 44100 ${SAMPLED_SPEECH}`);
     })
     .then(() =>

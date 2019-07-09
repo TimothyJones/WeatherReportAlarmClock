@@ -4,17 +4,18 @@
   "description": "Agent to provide weather reports on wake up",
   "main": "src/domain/index.js",
   "scripts": {
-    "lint": "eslint 'src/**/*.js'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint 'src/**/*.js' --config ../../.eslintrc.js",
+    "prebuild": "npm run lint",
+    "build": "zip -r function.zip .",
+    "predeploy": "npm run build",
+    "deploy": "aws lambda update-function-code --function-name MelbourneForecastLambda --zip-file fileb://function.zip"
   },
-  "author": "",
+  "author": "Tim Jones",
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.382.0",
     "ftp-get": "^0.3.1",
-    "lambda-audio": "^1.0.0",
     "moment-timezone": "^0.5.23",
-    "wait-on": "^3.2.0",
     "xml-js": "^1.6.8"
   },
   "devDependencies": {

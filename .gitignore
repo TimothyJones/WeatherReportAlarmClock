@@ -1,8 +1,13 @@
 # package directories
-node_modules
+**/node_modules
 jspm_packages
 melbourne.xml
 weather.mp3
 
 # Serverless directories
 .serverless
+
+**/function.zip
+**/*.packaged.yaml
+script/config.sh
+play.xml

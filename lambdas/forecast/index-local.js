@@ -1,6 +1,6 @@
-const { weather } = require('../../domain');
 const fs = require('fs');
 const EventEmitter = require('events');
+const { weather } = require('../../');
 
 const eventEmitter = new EventEmitter();
 
