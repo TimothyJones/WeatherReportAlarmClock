@@ -36,10 +36,10 @@ const temperatureDescription = data => {
 };
 
 const forecastToText = data =>
-  `<speak><amazon:breath duration='x-long' volume='x-soft'/><break strength="strong"/>,Good morning. <prosody rate="fast"><amazon:auto-breaths duration="short" volume="soft">${shortDescription(
+  `<speak>Good morning. <prosody rate="fast"><amazon:auto-breaths duration="short" volume="soft">${shortDescription(
     data
   )} ${umbrella(data)} ${temperatureDescription(
     data
-  )}</amazon:auto-breaths></prosody><break strength="strong"/><amazon:breath duration='x-long' volume='x-soft'/></speak>`;
+  )}</amazon:auto-breaths></prosody></speak>`;
 
 module.exports = forecastToText;
