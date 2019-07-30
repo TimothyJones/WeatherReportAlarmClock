@@ -5,7 +5,8 @@
   "main": "src/domain/index.js",
   "scripts": {
     "lint": "eslint 'src/**/*.js' --config ../../.eslintrc.js",
-    "prebuild": "npm run lint",
+    "clean": "rm -f function.zip",
+    "prebuild": "npm run clean && npm run lint",
     "build": "zip -r function.zip .",
     "predeploy": "npm run build",
     "deploy": "aws lambda update-function-code --function-name WrapWithChimeLambda --zip-file fileb://function.zip"
