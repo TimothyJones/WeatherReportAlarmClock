@@ -15,6 +15,7 @@ const writeToS3 = data =>
           console.log(err, err.stack);
           reject(err);
         } else {
+          console.log('wrote successfully');
           resolve(data);
         }
       }
