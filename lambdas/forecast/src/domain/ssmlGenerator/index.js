@@ -11,8 +11,11 @@ const shortDescription = data => {
 const umbrella = data => {
   if (data.rainChance) {
     const chance = parseInt(data.rainChance, 10);
+    if (chance >= 80) {
+      return 'It is very likely to rain. You should definitely take an umbrella.';
+    }
     if (chance >= 60) {
-      return 'It is very likely to rain. You probably want to take an umbrella.';
+      return 'It is likely to rain. You should take an umbrella.';
     }
     if (chance >= 30) {
       return 'It might rain. You may want to take an umbrella.';
