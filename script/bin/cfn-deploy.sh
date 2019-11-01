@@ -35,4 +35,4 @@ fi
 echo "🌳 Packaging $TEMPLATE_FILE into $PACKAGED_TEMPLATE_FILE"
 aws cloudformation package  --template-file "$TEMPLATE_FILE" --s3-bucket "$CLOUDFORMATION_TEMP_BUCKET_NAME"  --output-template-file "$PACKAGED_TEMPLATE_FILE"
 echo "🌳 Deploying $PACKAGED_TEMPLATE_FILE to $STACK_NAME"
-aws cloudformation deploy --template-file "$PACKAGED_TEMPLATE_FILE" --stack-name "$STACK_NAME" "$@"
+aws cloudformation deploy --template-file "$PACKAGED_TEMPLATE_FILE" --stack-name "$STACK_NAME" "$@" --capabilities CAPABILITY_IAM
