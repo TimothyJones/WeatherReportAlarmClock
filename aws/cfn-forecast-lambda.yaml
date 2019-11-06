@@ -44,6 +44,9 @@ Resources:
           Value: !Ref Product
       Code: 
         ZipFile: module.exports.handler = () => {}
+      Environment:
+        Variables:
+          LD_LIBRARY_PATH: /var/task/node_modules/lambda-audio/lib64:$LD_PRIMARY_PATH
       FunctionName: WrapWithChimeLambda
       Handler: index.handler
       Role: !GetAtt WrapLambdaRole.Arn
