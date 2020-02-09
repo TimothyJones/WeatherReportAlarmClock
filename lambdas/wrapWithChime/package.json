@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint 'src/**/*.js' --config ../../.eslintrc.js",
     "clean": "rm -f function.zip",
-    "prebuild": "npm run clean && npm run lint",
+    "prebuild": "npm run clean && npm run lint && cp libgomp.so.1 node_modules/lambda-audio/bin/",
     "build": "zip -r function.zip .",
     "predeploy": "npm run build",
     "deploy": "aws lambda update-function-code --function-name WrapWithChimeLambda --zip-file fileb://function.zip"
