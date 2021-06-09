@@ -5,7 +5,7 @@ Parameters:
     Description: 'Name for the S3 bucket where the application will be deployed'
     Type: String
     Default: tims-notifications
-  Product: 
+  Product:
     Type: String
     Default: ForecastAlarm
 
@@ -24,25 +24,25 @@ Resources:
         LambdaConfigurations:
           - Event: 's3:ObjectCreated:*'
             Function: !GetAtt WrapLambda.Arn
-            Filter: 
-              S3Key: 
+            Filter:
+              S3Key:
                 Rules:
                   - Name: prefix
                     Value: audio/
   WrapLambdaInvokePermission:
     Type: AWS::Lambda::Permission
-    Properties: 
+    Properties:
       Action: lambda:InvokeFunction
       FunctionName: WrapWithChimeLambda
       Principal: s3.amazonaws.com
       SourceArn: 'arn:aws:s3:::tims-notifications'
-  WrapLambda:  
+  WrapLambda:
     Type: AWS::Lambda::Function
-    Properties: 
+    Properties:
       Tags:
         - Key: Product
           Value: !Ref Product
-      Code: 
+      Code:
         ZipFile: module.exports.handler = () => {}
       Environment:
         Variables:
@@ -50,7 +50,7 @@ Resources:
       FunctionName: WrapWithChimeLambda
       Handler: index.handler
       Role: !GetAtt WrapLambdaRole.Arn
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 20
   WrapLambdaRole:
     Type: AWS::IAM::Role
@@ -86,18 +86,18 @@ Resources:
                 Resource:
                   - 'arn:aws:s3:::tims-notifications'
                   - 'arn:aws:s3:::tims-notifications/*'
-  ForecastLambda:  
+  ForecastLambda:
     Type: AWS::Lambda::Function
-    Properties: 
+    Properties:
       Tags:
         - Key: Product
           Value: !Ref Product
-      Code: 
+      Code:
         ZipFile: module.exports.handler = () => {}
       FunctionName: MelbourneForecastLambda
       Handler: index.handler
       Role: !GetAtt ForecastLambdaRole.Arn
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
   ForecastLambdaRole:
     Type: AWS::IAM::Role
     Properties:
@@ -132,7 +132,7 @@ Resources:
                   - !Join ['', [!GetAtt DeployBucket.Arn, '/*']]
               - Effect: Allow
                 Action:
-                  - "polly:SynthesizeSpeech"
+                  - 'polly:SynthesizeSpeech'
                 Resource:
                   - '*'
   ScheduleRole:
@@ -159,20 +159,18 @@ Resources:
                   - !GetAtt ForecastLambda.Arn
   ScheduleRule:
     Type: AWS::Events::Rule
-    Properties: 
-      Description: "Every day at weather report time"
+    Properties:
+      Description: 'Every day at weather report time'
       RoleArn: !GetAtt ScheduleRole.Arn
       ScheduleExpression: 'cron(0 16 * * ? *)'
       State: ENABLED
-      Targets: 
+      Targets:
         - Arn: !GetAtt ForecastLambda.Arn
           Id: ForecastLambda
   LambdaSchedulePermission:
-    Type: "AWS::Lambda::Permission"
+    Type: 'AWS::Lambda::Permission'
     Properties:
       Action: 'lambda:InvokeFunction'
       FunctionName: !Sub ${ForecastLambda.Arn}
       Principal: 'events.amazonaws.com'
       SourceArn: !Sub ${ScheduleRule.Arn}
-
-          
