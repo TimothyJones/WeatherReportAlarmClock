@@ -7,6 +7,7 @@ require_env_var STACK_PREFIX
 require_env_var STACK_SUFFIX
 require_env_var CLOUDFORMATION_TEMP_BUCKET_NAME
 require_env_var EXPECT_AWS_ACCOUNT
+require_env_var KMS_KEY_ARN
 
 STACK_NAME="${STACK_PREFIX}"-"$STACK_SUFFIX"
 TEMPLATE_FILE="$SCRIPT_DIR/../aws/cfn-$STACK_SUFFIX.yaml"
@@ -35,4 +36,4 @@ fi
 echo "🌳 Packaging $TEMPLATE_FILE into $PACKAGED_TEMPLATE_FILE"
 aws cloudformation package  --template-file "$TEMPLATE_FILE" --s3-bucket "$CLOUDFORMATION_TEMP_BUCKET_NAME"  --output-template-file "$PACKAGED_TEMPLATE_FILE"
 echo "🌳 Deploying $PACKAGED_TEMPLATE_FILE to $STACK_NAME"
-aws cloudformation deploy --template-file "$PACKAGED_TEMPLATE_FILE" --stack-name "$STACK_NAME" "$@" --capabilities CAPABILITY_IAM
+aws cloudformation deploy --template-file "$PACKAGED_TEMPLATE_FILE" --stack-name "$STACK_NAME"  --parameter-overrides KmsKeyArn="$KMS_KEY_ARN" --capabilities CAPABILITY_IAM

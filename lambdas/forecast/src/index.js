@@ -1,10 +1,37 @@
-const forecast = require('./connectors/weatherForecast');
-const polly = require('./connectors/polly');
-const writeToS3 = require('./connectors/s3');
-const forecastToSsml = require('./domain/ssmlGenerator');
+const AWS = require('aws-sdk');
 
-module.exports.weather = () =>
-  forecast
-    .getWeatherForecast()
-    .then(data => polly(forecastToSsml(data)))
-    .then(data => writeToS3(data));
+const forecast = require('./connectors/weatherForecast');
+const textToSpeech = require('./connectors/polly');
+const saveForecast = require('./connectors/s3');
+const toSsml = require('./domain/ssmlGenerator');
+
+const kms = new AWS.KMS();
+
+const decrypt = encrypted =>
+  new Promise((resolve, reject) =>
+    kms.decrypt(
+      {
+        CiphertextBlob: Buffer.from(encrypted, 'base64'),
+      },
+      (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data.Plaintext.toString());
+        }
+      }
+    )
+  );
+
+const config = decrypt(process.env.AirQualityApiToken).then(param => {});
+
+const getForecasts = () =>
+  Promise.all([
+    forecast.getWeatherForecast(),
+    airQuality.getAirQualityForecast(),
+  ]).then(arr => reduce((acc, item) => ({ ...acc, ...item }), {}));
+
+module.exports.weather = async () =>
+  getForecasts()
+    .then(forecasts => textToSpeech(toSsml(forecasts)))
+    .then(data => saveForecast(data));

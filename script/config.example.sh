@@ -2,3 +2,4 @@ export ENVIRONMENT="production"
 export STACK_PREFIX="wakeup"
 export CLOUDFORMATION_TEMP_BUCKET_NAME=
 export EXPECT_AWS_ACCOUNT=
+export KMS_KEY_ARN=

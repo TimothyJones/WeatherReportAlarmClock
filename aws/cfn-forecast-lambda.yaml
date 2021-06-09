@@ -8,6 +8,11 @@ Parameters:
   Product: 
     Type: String
     Default: ForecastAlarm
+  AirQualityApiToken:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: '/wakeup/connectors/aqcinToken'
+  KmsKeyArn:
+    Type: String
 
 Resources:
   DeployBucket:
@@ -94,6 +99,9 @@ Resources:
           Value: !Ref Product
       Code: 
         ZipFile: module.exports.handler = () => {}
+      Environment:
+        Variables:
+          AirQualityApiToken: !Ref AirQualityApiToken 
       FunctionName: MelbourneForecastLambda
       Handler: index.handler
       Role: !GetAtt ForecastLambdaRole.Arn
@@ -135,6 +143,11 @@ Resources:
                   - "polly:SynthesizeSpeech"
                 Resource:
                   - '*'
+              - Effect: Allow
+                Action:
+                  - kms:Decrypt
+                Resource: 
+                  - !Ref KmsKeyArn
   ScheduleRole:
     Type: AWS::IAM::Role
     Properties:

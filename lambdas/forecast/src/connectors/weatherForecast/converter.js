@@ -24,6 +24,7 @@ const select = (forecast, text) =>
 const marshal = selectedForecast =>
   selectedForecast
     ? {
+        type: 'FORECAST',
         text: select(selectedForecast, 'precis'),
         minTemp: select(selectedForecast, 'air_temperature_minimum'),
         maxTemp: select(selectedForecast, 'air_temperature_maximum'),
