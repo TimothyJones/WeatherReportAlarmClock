@@ -16,7 +16,7 @@
   "dependencies": {
     "aws-sdk": "^2.1520.0",
     "lambda-audio": "^1.0.0",
-    "wait-on": "^7.2.0"
+    "wait-on": "^8.0.2"
   },
   "devDependencies": {
     "eslint": "^5.10.0",
